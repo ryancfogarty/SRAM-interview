@@ -1,4 +1,4 @@
-package com.example.stravaapp.ui.theme
+package com.example.stravaapp.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
