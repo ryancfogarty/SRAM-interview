@@ -2,4 +2,6 @@
     <string name="app_name">StravaApp</string>
 
     <string name="authorize_with_strava">Authorize with Strava</string>
+    <string name="authorization_error_message">An error occurred while connecting with Strava. Please try again.</string>
+    <string name="retry_authorization">Retry authorization</string>
 </resources>

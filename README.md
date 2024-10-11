@@ -12,7 +12,7 @@ For the MVP, the app will allow the user to login and search for segments near t
 
 
 ***Build steps***
-I included my Strava API clientId and clientSecret to make building easier. If you want to replace these, you can update the build config fields in the app/build.gradle.kts file. Of course, it is not very secure to share these details, but I don't mind in this instance.
+I included my Strava API clientId and clientSecret to make building easier. If you want to replace these, you can update the build config fields in the app/build.gradle.kts file and update the required code (redirect_uri, intent-filter). Of course, it is not very secure to share these details, but I don't mind in this instance.
 
 
 ***Decision log***

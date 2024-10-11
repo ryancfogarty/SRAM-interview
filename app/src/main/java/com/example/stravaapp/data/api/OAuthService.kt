@@ -1,7 +1,7 @@
 package com.example.stravaapp.data.api
 
 import com.example.stravaapp.BuildConfig
-import retrofit2.http.Field
+import com.squareup.moshi.Json
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -17,6 +17,5 @@ interface OAuthService {
 }
 
 class TokenResponseDto(
-    @Field("access_token") val accessToken: String,
-    @Field("refresh_token") val refreshToken: String,
+    @Json(name = "access_token") val accessToken: String,
 )

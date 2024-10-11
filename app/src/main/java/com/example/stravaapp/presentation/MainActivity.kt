@@ -7,14 +7,28 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.stravaapp.BuildConfig
+import com.example.stravaapp.presentation.navigation.Navigator
+import com.example.stravaapp.presentation.navigation.Screen
+import com.example.stravaapp.presentation.screen.ExploreScreen
 import com.example.stravaapp.presentation.screen.LoginScreen
 import com.example.stravaapp.presentation.theme.StravaAppTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val viewModel: LoginViewModel by viewModels()
+
+    @Inject
+    lateinit var navigator: Navigator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +38,33 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             StravaAppTheme {
-                LoginScreen(onAuthorize = ::authorize)
+                MainNavHost()
+            }
+        }
+    }
+
+    @Composable
+    private fun MainNavHost() {
+        val navController = rememberNavController()
+
+        LaunchedEffect(Unit) {
+            navigator.screen.onEach { screen ->
+                navController.navigate(screen.name)
+            }.launchIn(this)
+        }
+
+        NavHost(
+            navController = navController,
+            startDestination = Screen.Login.name
+        ) {
+            composable(Screen.Login.name) {
+                LoginScreen(
+                    viewModel = viewModel,
+                    onAuthorize = ::authorize
+                )
+            }
+            composable(Screen.Explore.name) {
+                ExploreScreen()
             }
         }
     }

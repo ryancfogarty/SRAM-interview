@@ -1,12 +1,16 @@
 package com.example.stravaapp.presentation
 
 import com.example.stravaapp.data.repository.AuthenticationRepository
+import com.example.stravaapp.presentation.navigation.Navigator
+import com.example.stravaapp.presentation.navigation.Screen
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -21,12 +25,16 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class LoginViewModelTest {
     private val authenticationRepository: AuthenticationRepository = mockk()
+    private val navigator: Navigator = mockk()
     private lateinit var sut: LoginViewModel
 
     @Before
     fun setup() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
-        sut = LoginViewModel(authenticationRepository)
+        sut = LoginViewModel(
+            authenticationRepository = authenticationRepository,
+            navigator = navigator
+        )
     }
 
     @After
@@ -54,18 +62,14 @@ class LoginViewModelTest {
     @Test
     fun givenAuthenticationSucceeds_whenAuthenticate_thenNavigateToExploreScreen() = runTest {
         val code = "code"
-        val viewActions = mutableListOf<ViewAction>()
-        backgroundScope.launch(UnconfinedTestDispatcher()) {
-            sut.viewAction.toList(viewActions)
-        }
+        val screenFlow: MutableSharedFlow<Screen> = mockk()
+        coEvery { navigator.screen } returns screenFlow
+        coEvery { screenFlow.emit(Screen.Explore) } just runs
         coEvery { authenticationRepository.authenticate(code) } just runs
 
         sut.authenticate(code)
 
-        assertEquals(
-            listOf(ViewAction.NavigateToExploreScreen),
-            viewActions
-        )
+        coVerify(exactly = 1) { screenFlow.emit(Screen.Explore) }
         assertEquals(
             State.Initialized,
             sut.uiState.value
@@ -75,18 +79,14 @@ class LoginViewModelTest {
     @Test
     fun givenAuthenticationFails_whenAuthenticate_thenDisplayErrorState() = runTest {
         val code = "code"
-        val viewActions = mutableListOf<ViewAction>()
-        backgroundScope.launch(UnconfinedTestDispatcher()) {
-            sut.viewAction.toList(viewActions)
-        }
+        val screenFlow: MutableSharedFlow<Screen> = mockk()
+        coEvery { navigator.screen } returns screenFlow
+        coEvery { screenFlow.emit(Screen.Explore) } just runs
         coEvery { authenticationRepository.authenticate(code) } throws Exception()
 
         sut.authenticate(code)
 
-        assertEquals(
-            emptyList<ViewAction>(),
-            viewActions
-        )
+        coVerify(exactly = 0) { screenFlow.emit(Screen.Explore) }
         assertEquals(
             State.Error,
             sut.uiState.value
