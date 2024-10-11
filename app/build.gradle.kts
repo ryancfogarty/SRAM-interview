@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -18,6 +21,9 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("String", "STRAVA_CLIENT_ID" ,"\"137314\"")
+        buildConfigField("String", "STRAVA_CLIENT_SECRET","\"19f93aa790fc094650ddc6a737ed73abc0edb798\"")
     }
 
     buildTypes {
@@ -38,6 +44,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -67,5 +74,13 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    ksp(libs.hilt.compiler)
+    implementation(libs.hilt)
+
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.moshi)
+
     testImplementation(libs.mockk)
+
+    testImplementation(libs.coroutines.test)
 }

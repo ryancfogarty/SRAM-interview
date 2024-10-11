@@ -11,3 +11,10 @@ For the MVP, the app will allow the user to login and search for segments near t
 5. Add additional fields (min climb cat & max climb cat) to the search
 
 
+***Build steps***
+I included my Strava API clientId and clientSecret to make building easier. If you want to replace these, you can update the build config fields in the app/build.gradle.kts file. Of course, it is not very secure to share these details, but I don't mind in this instance.
+
+
+***Decision log***
+I've decided to go for a very naive and simple approach for handling access tokens; I will only persist the access token for the lifetime of the app instance. I won't persist the refresh token, and thus won't be refreshing my access token when the access token expires. This is a very bad UX, as the user will have to sign back in often (they kill the app instance, the OS kills the app instance, access token expires). However, it makes OAuth much easier for me, and it can be improved in the future if there is time. 
+
