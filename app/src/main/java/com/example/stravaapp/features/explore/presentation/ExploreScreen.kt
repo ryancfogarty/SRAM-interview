@@ -26,7 +26,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -35,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import com.example.stravaapp.R
 import com.example.stravaapp.common.presentation.component.CtaButton
 import com.example.stravaapp.features.explore.data.repository.LatLong
-import com.example.stravaapp.features.explore.data.repository.Segment
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.location.LocationServices
@@ -46,8 +48,6 @@ fun ExploreScreen(
     viewModel: ExploreViewModel,
     onBack: () -> Unit,
 ) {
-    val state = viewModel.uiState.collectAsState().value
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -77,7 +77,7 @@ fun ExploreScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             ExploreScreenContent(
-                state = state,
+                state = viewModel.uiState,
                 modifier = Modifier.weight(1f),
             )
 
@@ -128,7 +128,7 @@ private fun ExploreScreenContent(
 
 @Composable
 private fun SegmentList(
-    segments: List<Segment>,
+    segments: List<SegmentUI>,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -170,8 +170,9 @@ private fun ExploreSegmentsCta(
             Manifest.permission.ACCESS_FINE_LOCATION,
         )
     )
-    LaunchedEffect(permissionRequest.allPermissionsGranted) {
-        if (permissionRequest.allPermissionsGranted) {
+    var requestedPermissions: Boolean by remember { mutableStateOf(false) }
+    LaunchedEffect(permissionRequest.allPermissionsGranted, requestedPermissions) {
+        if (permissionRequest.allPermissionsGranted && requestedPermissions) {
             getLastLocation(context, onLocationUpdate)
         }
     }
@@ -179,6 +180,7 @@ private fun ExploreSegmentsCta(
     CtaButton(
         onClick = {
             if (!permissionRequest.allPermissionsGranted) {
+                requestedPermissions = true
                 permissionRequest.launchMultiplePermissionRequest()
             } else {
                 getLastLocation(context, onLocationUpdate)

@@ -1,10 +1,9 @@
 package com.example.stravaapp.features.login.presentation
 
-import com.example.stravaapp.features.login.data.repository.AuthenticationRepository
+import androidx.lifecycle.SavedStateHandle
 import com.example.stravaapp.common.Navigator
 import com.example.stravaapp.common.Screen
-import com.example.stravaapp.features.login.presentation.LoginViewModel
-import com.example.stravaapp.features.login.presentation.State
+import com.example.stravaapp.features.login.data.repository.AuthenticationRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.just
@@ -13,9 +12,8 @@ import io.mockk.runs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -32,10 +30,11 @@ class LoginViewModelTest {
 
     @Before
     fun setup() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
+        Dispatchers.setMain(StandardTestDispatcher())
         sut = LoginViewModel(
             authenticationRepository = authenticationRepository,
-            navigator = navigator
+            navigator = navigator,
+            savedStateHandle = SavedStateHandle(),
         )
     }
 
@@ -46,18 +45,14 @@ class LoginViewModelTest {
 
     @Test
     fun whenAuthenticate_thenDisplayAuthenticatingState() = runTest {
-        val uiStates = mutableListOf<State>()
         val code = "code"
-        backgroundScope.launch(UnconfinedTestDispatcher()) {
-            sut.uiState.toList(uiStates)
-        }
         coEvery { authenticationRepository.authenticate(code) } just runs
 
         sut.authenticate(code)
 
         assertEquals(
             State.Authenticating,
-            uiStates[1],
+            sut.uiState,
         )
     }
 
@@ -70,11 +65,12 @@ class LoginViewModelTest {
         coEvery { authenticationRepository.authenticate(code) } just runs
 
         sut.authenticate(code)
+        advanceUntilIdle()
 
         coVerify(exactly = 1) { screenFlow.emit(Screen.Explore) }
         assertEquals(
             State.Initialized,
-            sut.uiState.value
+            sut.uiState
         )
     }
 
@@ -87,11 +83,12 @@ class LoginViewModelTest {
         coEvery { authenticationRepository.authenticate(code) } throws Exception()
 
         sut.authenticate(code)
+        advanceUntilIdle()
 
         coVerify(exactly = 0) { screenFlow.emit(Screen.Explore) }
         assertEquals(
             State.Error,
-            sut.uiState.value
+            sut.uiState
         )
     }
 }

@@ -1,5 +1,6 @@
 package com.example.stravaapp.features.explore.presentation
 
+import androidx.lifecycle.SavedStateHandle
 import com.example.stravaapp.features.explore.data.repository.LatLong
 import com.example.stravaapp.features.explore.data.repository.Segment
 import com.example.stravaapp.features.explore.data.repository.SegmentRepository
@@ -7,9 +8,8 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -25,8 +25,8 @@ class ExploreViewModelTest {
 
     @Before
     fun setup() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
-        sut = ExploreViewModel(repository)
+        Dispatchers.setMain(StandardTestDispatcher())
+        sut = ExploreViewModel(repository, SavedStateHandle())
     }
 
     @After
@@ -36,20 +36,16 @@ class ExploreViewModelTest {
 
     @Test
     fun whenExploreSegments_thenDisplayLoadingState() = runTest {
-        val states = mutableListOf<State>()
-        backgroundScope.launch(UnconfinedTestDispatcher()) {
-            sut.uiState.toList(states)
-        }
         sut.exploreSegments(mockk(), mockk())
 
         assertEquals(
-            states[1],
-            State.Loading
+            State.Loading,
+            sut.uiState
         )
     }
 
     @Test
-    fun givenRequestSucceeds_whenExploreSegments_thenDisplaySegments() {
+    fun givenRequestSucceeds_whenExploreSegments_thenDisplaySegments() = runTest {
         val southwestBound = LatLong(1f, 2f)
         val northeastBound = LatLong(3f, 4f)
         val segment = Segment(
@@ -60,26 +56,34 @@ class ExploreViewModelTest {
         coEvery { repository.explore(southwestBound, northeastBound) } returns listOf(segment)
 
         sut.exploreSegments(southwestBound, northeastBound)
+        advanceUntilIdle()
 
         assertEquals(
-            sut.uiState.value,
             State.Success(
-                segments = listOf(segment)
-            )
+                segments = listOf(
+                    SegmentUI(
+                        name = segment.name,
+                        distance = segment.distance,
+                        averageGrade = segment.averageGrade,
+                    )
+                )
+            ),
+            sut.uiState,
         )
     }
 
     @Test
-    fun givenRequestFails_whenExploreSegments_thenDisplayError() {
+    fun givenRequestFails_whenExploreSegments_thenDisplayError() = runTest {
         val southwestBound = LatLong(1f, 2f)
         val northeastBound = LatLong(3f, 4f)
         coEvery { repository.explore(southwestBound, northeastBound) } throws Exception()
 
         sut.exploreSegments(southwestBound, northeastBound)
+        advanceUntilIdle()
 
         assertEquals(
-            sut.uiState.value,
             State.Error,
+            sut.uiState,
         )
     }
 }

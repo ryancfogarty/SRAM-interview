@@ -12,7 +12,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -28,8 +27,6 @@ fun LoginScreen(
     viewModel: LoginViewModel,
     onAuthorize: () -> Unit,
 ) {
-    val state = viewModel.uiState.collectAsState().value
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -48,7 +45,7 @@ fun LoginScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            when (state) {
+            when (viewModel.uiState) {
                 is State.Initialized -> {
                     Box(modifier = Modifier.weight(1f)) {
                         Text(
@@ -82,11 +79,15 @@ fun Error(
     onRetry: () -> Unit
 ) {
     Column {
-        Text(
-            text = stringResource(R.string.authorization_error_message),
-            modifier = Modifier.weight(1f),
-            textAlign = TextAlign.Center,
-        )
+        Box(
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(
+                text = stringResource(R.string.authorization_error_message),
+                modifier = Modifier.align(Alignment.Center),
+                textAlign = TextAlign.Center,
+            )
+        }
 
         CtaButton(
             title = stringResource(R.string.retry_connecting),
