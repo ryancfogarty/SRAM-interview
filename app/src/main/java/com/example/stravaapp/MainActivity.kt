@@ -15,9 +15,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.stravaapp.common.Navigator
 import com.example.stravaapp.common.Screen
 import com.example.stravaapp.features.explore.presentation.ExploreScreen
+import com.example.stravaapp.features.explore.presentation.ExploreViewModel
 import com.example.stravaapp.features.login.presentation.LoginScreen
-import com.example.stravaapp.features.login.presentation.theme.StravaAppTheme
 import com.example.stravaapp.features.login.presentation.LoginViewModel
+import com.example.stravaapp.features.login.presentation.theme.StravaAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -25,7 +26,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val viewModel: LoginViewModel by viewModels()
+    private val loginViewModel: LoginViewModel by viewModels()
+    private val exploreViewModel: ExploreViewModel by viewModels()
 
     @Inject
     lateinit var navigator: Navigator
@@ -33,7 +35,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        extractAuthCode()?.let(viewModel::authenticate)
+        extractAuthCode()?.let(loginViewModel::authenticate)
 
         enableEdgeToEdge()
         setContent {
@@ -59,12 +61,20 @@ class MainActivity : ComponentActivity() {
         ) {
             composable(Screen.Login.name) {
                 LoginScreen(
-                    viewModel = viewModel,
+                    viewModel = loginViewModel,
                     onAuthorize = ::authorize
                 )
             }
             composable(Screen.Explore.name) {
-                ExploreScreen()
+                ExploreScreen(
+                    viewModel = exploreViewModel,
+                    onBack = {
+                        navController.popBackStack(
+                            route = Screen.Explore.name,
+                            inclusive = true,
+                        )
+                    }
+                )
             }
         }
     }

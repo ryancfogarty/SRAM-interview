@@ -1,5 +1,6 @@
 package com.example.stravaapp.features.explore.data.repository
 
+import com.example.stravaapp.features.explore.data.api.ExploreResponseDto
 import com.example.stravaapp.features.explore.data.api.SegmentDto
 import com.example.stravaapp.features.explore.data.api.SegmentService
 import io.mockk.coEvery
@@ -38,17 +39,18 @@ class SegmentRepositoryTest {
         val northeastBound = LatLong(3f, 4f)
         sut.explore(southwestBound, northeastBound)
 
-        coVerify(exactly = 1) { service.explore(listOf(1f, 2f, 3f, 4f)) }
+        coVerify(exactly = 1) { service.explore("1.0,2.0,3.0,4.0") }
     }
 
     @Test
     fun givenRequestSucceeds_whenExploreSegments_thenMapDtoToModel() = runTest {
-        val dto = SegmentDto(
+        val segmentDto = SegmentDto(
             name = "name",
             distance = 12.4f,
             averageGrade = 4.5f
         )
-        coEvery { service.explore(listOf(1f, 2f, 3f, 4f)) } returns listOf(dto)
+        val responseDto = ExploreResponseDto(listOf(segmentDto))
+        coEvery { service.explore("1.0,2.0,3.0,4.0") } returns responseDto
 
         val southwestBound = LatLong(1f, 2f)
         val northeastBound = LatLong(3f, 4f)
@@ -57,9 +59,9 @@ class SegmentRepositoryTest {
         assertEquals(
             listOf(
                 Segment(
-                    name = dto.name,
-                    distance = dto.distance,
-                    averageGrade = dto.averageGrade,
+                    name = segmentDto.name,
+                    distance = segmentDto.distance,
+                    averageGrade = segmentDto.averageGrade,
                 )
             ),
             response

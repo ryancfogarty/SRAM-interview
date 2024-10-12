@@ -12,9 +12,9 @@ class SegmentRepository @Inject constructor(
             add(southwestBound.long)
             add(northeastBound.lat)
             add(northeastBound.long)
-        }
+        }.joinToString(",")
 
-        return service.explore(bounds).map { dto ->
+        return service.explore(bounds).segments.map { dto ->
             Segment(
                 name = dto.name,
                 distance = dto.distance,

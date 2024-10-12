@@ -5,10 +5,14 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface SegmentService {
-    @GET("/explore")
-    suspend fun explore(@Query("bounds") bounds: List<Float>): List<SegmentDto>
+    @GET("explore")
+    suspend fun explore(@Query("bounds") bounds: String): ExploreResponseDto
 
 }
+
+class ExploreResponseDto(
+    val segments: List<SegmentDto>
+)
 
 class SegmentDto(
     val name: String,

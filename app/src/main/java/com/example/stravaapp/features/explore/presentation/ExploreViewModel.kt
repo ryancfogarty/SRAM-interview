@@ -5,11 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.stravaapp.features.explore.data.repository.LatLong
 import com.example.stravaapp.features.explore.data.repository.Segment
 import com.example.stravaapp.features.explore.data.repository.SegmentRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class ExploreViewModel @Inject constructor(
     private val segmentRepository: SegmentRepository
 ) : ViewModel() {
@@ -26,7 +28,7 @@ class ExploreViewModel @Inject constructor(
                 _uiState.value = State.Success(
                     segments = segmentRepository.explore(southwestBound, northeastBound)
                 )
-            } catch (_: Throwable) {
+            } catch (t: Throwable) {
                 _uiState.value = State.Error
             }
         }

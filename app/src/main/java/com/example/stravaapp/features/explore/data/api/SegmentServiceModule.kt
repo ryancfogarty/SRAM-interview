@@ -25,7 +25,7 @@ object SegmentServiceModule {
 
         return Retrofit.Builder()
             .client(authenticatedClient)
-            .baseUrl("https://www.strava.com/segments/")
+            .baseUrl("https://www.strava.com/api/v3/segments/")
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
             .create(SegmentService::class.java)

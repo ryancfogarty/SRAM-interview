@@ -1,7 +1,15 @@
 <resources>
+    <!-- Common -->
     <string name="app_name">StravaApp</string>
+    <string name="back">Back</string>
 
+    <!-- Login -->
+    <string name="login">Login</string>
     <string name="authorize_with_strava">Authorize with Strava</string>
     <string name="authorization_error_message">An error occurred while connecting with Strava. Please try again.</string>
     <string name="retry_authorization">Retry authorization</string>
+
+    <!-- Explore -->
+    <string name="explore">Explore</string>
+    <string name="explore_segments_near_me">Explore segments near me</string>
 </resources>
