@@ -14,7 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.stravaapp.common.Navigator
 import com.example.stravaapp.common.Screen
-import com.example.stravaapp.features.explore.ExploreScreen
+import com.example.stravaapp.features.explore.presentation.ExploreScreen
 import com.example.stravaapp.features.login.presentation.LoginScreen
 import com.example.stravaapp.features.login.presentation.theme.StravaAppTheme
 import com.example.stravaapp.features.login.presentation.LoginViewModel

@@ -1,4 +1,4 @@
-package com.example.stravaapp.presentation
+package com.example.stravaapp.features.login.presentation
 
 import com.example.stravaapp.features.login.data.repository.AuthenticationRepository
 import com.example.stravaapp.common.Navigator
