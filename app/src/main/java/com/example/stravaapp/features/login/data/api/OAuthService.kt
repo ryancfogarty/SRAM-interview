@@ -1,4 +1,4 @@
-package com.example.stravaapp.data.api
+package com.example.stravaapp.features.login.data.api
 
 import com.example.stravaapp.BuildConfig
 import com.squareup.moshi.Json

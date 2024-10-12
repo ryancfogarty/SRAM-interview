@@ -1,4 +1,4 @@
-package com.example.stravaapp.presentation.theme
+package com.example.stravaapp.features.login.presentation.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

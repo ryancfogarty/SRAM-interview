@@ -1,4 +1,4 @@
-package com.example.stravaapp.data.cache
+package com.example.stravaapp.features.login.data.cache
 
 
 object AccessTokenCache {

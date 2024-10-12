@@ -1,4 +1,4 @@
-package com.example.stravaapp.presentation
+package com.example.stravaapp
 
 import android.content.Intent
 import android.net.Uri
@@ -12,12 +12,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.stravaapp.BuildConfig
-import com.example.stravaapp.presentation.navigation.Navigator
-import com.example.stravaapp.presentation.navigation.Screen
-import com.example.stravaapp.presentation.screen.ExploreScreen
-import com.example.stravaapp.presentation.screen.LoginScreen
-import com.example.stravaapp.presentation.theme.StravaAppTheme
+import com.example.stravaapp.common.Navigator
+import com.example.stravaapp.common.Screen
+import com.example.stravaapp.features.explore.ExploreScreen
+import com.example.stravaapp.features.login.presentation.LoginScreen
+import com.example.stravaapp.features.login.presentation.theme.StravaAppTheme
+import com.example.stravaapp.features.login.presentation.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

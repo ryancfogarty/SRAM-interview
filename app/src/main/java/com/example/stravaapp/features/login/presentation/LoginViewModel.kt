@@ -1,10 +1,10 @@
-package com.example.stravaapp.presentation
+package com.example.stravaapp.features.login.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.stravaapp.data.repository.AuthenticationRepository
-import com.example.stravaapp.presentation.navigation.Navigator
-import com.example.stravaapp.presentation.navigation.Screen
+import com.example.stravaapp.features.login.data.repository.AuthenticationRepository
+import com.example.stravaapp.common.Navigator
+import com.example.stravaapp.common.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

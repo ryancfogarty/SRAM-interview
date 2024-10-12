@@ -1,4 +1,4 @@
-package com.example.stravaapp.presentation.screen
+package com.example.stravaapp.features.login.presentation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,8 +17,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.stravaapp.R
-import com.example.stravaapp.presentation.LoginViewModel
-import com.example.stravaapp.presentation.State
 
 
 @Composable

@@ -1,4 +1,4 @@
-package com.example.stravaapp.presentation.screen
+package com.example.stravaapp.features.explore
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

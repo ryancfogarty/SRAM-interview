@@ -1,8 +1,10 @@
 package com.example.stravaapp.presentation
 
-import com.example.stravaapp.data.repository.AuthenticationRepository
-import com.example.stravaapp.presentation.navigation.Navigator
-import com.example.stravaapp.presentation.navigation.Screen
+import com.example.stravaapp.features.login.data.repository.AuthenticationRepository
+import com.example.stravaapp.common.Navigator
+import com.example.stravaapp.common.Screen
+import com.example.stravaapp.features.login.presentation.LoginViewModel
+import com.example.stravaapp.features.login.presentation.State
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.just

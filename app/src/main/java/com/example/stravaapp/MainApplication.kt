@@ -1,4 +1,4 @@
-package com.example.stravaapp.presentation
+package com.example.stravaapp
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

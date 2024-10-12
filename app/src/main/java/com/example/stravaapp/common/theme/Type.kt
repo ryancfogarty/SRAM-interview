@@ -1,4 +1,4 @@
-package com.example.stravaapp.presentation.theme
+package com.example.stravaapp.features.login.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

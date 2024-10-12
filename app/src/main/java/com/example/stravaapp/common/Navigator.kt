@@ -1,4 +1,4 @@
-package com.example.stravaapp.presentation.navigation
+package com.example.stravaapp.common
 
 import kotlinx.coroutines.flow.MutableSharedFlow
 import javax.inject.Inject

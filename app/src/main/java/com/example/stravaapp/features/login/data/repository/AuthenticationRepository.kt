@@ -1,7 +1,7 @@
-package com.example.stravaapp.data.repository
+package com.example.stravaapp.features.login.data.repository
 
-import com.example.stravaapp.data.api.OAuthService
-import com.example.stravaapp.data.cache.AccessTokenCache
+import com.example.stravaapp.features.login.data.api.OAuthService
+import com.example.stravaapp.features.login.data.cache.AccessTokenCache
 import javax.inject.Inject
 
 class AuthenticationRepository @Inject constructor(
