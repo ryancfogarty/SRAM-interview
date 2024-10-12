@@ -5,11 +5,16 @@
 
     <!-- Login -->
     <string name="login">Login</string>
-    <string name="authorize_with_strava">Authorize with Strava</string>
+    <string name="welcome_message">Welcome! Please connect with your Strava account to explore nearby segments. 🗺</string>
+    <string name="connect_with_strava">Connect with Strava</string>
     <string name="authorization_error_message">An error occurred while connecting with Strava. Please try again.</string>
-    <string name="retry_authorization">Retry authorization</string>
+    <string name="retry_connecting">Retry connecting</string>
 
     <!-- Explore -->
     <string name="explore">Explore</string>
     <string name="explore_segments_near_me">Explore segments near me</string>
+    <string name="nearby_segments">Nearby segments</string>
+    <string name="grade_avg_x">Grade (avg): %1$.2f%%</string>
+    <string name="distance_x_meters">Distance: %1$.1f meters</string>
+    <string name="oops_error_retry">Oops! An error has occurred. Please try again.</string>
 </resources>

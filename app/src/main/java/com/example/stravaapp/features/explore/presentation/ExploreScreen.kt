@@ -9,15 +9,18 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -106,13 +109,18 @@ private fun ExploreScreenContent(
             is State.Success -> {
                 SegmentList(segments = state.segments)
             }
+
             is State.Loading -> {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
                 )
             }
+
             is State.Error -> {
-                // TODO
+                Text(
+                    text = stringResource(R.string.oops_error_retry),
+                    modifier = Modifier.align(Alignment.Center),
+                )
             }
         }
     }
@@ -123,9 +131,28 @@ private fun SegmentList(
     segments: List<Segment>,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(modifier = modifier) {
+    LazyColumn(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        item {
+            Text(stringResource(R.string.nearby_segments))
+        }
         items(segments) { segment ->
-            Text(segment.name)
+            Card(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier.padding(8.dp)
+                ) {
+                    Text(
+                        text = segment.name,
+                        style = MaterialTheme.typography.headlineSmall,
+                    )
+                    Text(stringResource(R.string.grade_avg_x, segment.averageGrade))
+                    Text(stringResource(R.string.distance_x_meters, segment.distance))
+                }
+            }
         }
     }
 }
